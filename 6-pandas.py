@@ -42,7 +42,8 @@ print("total revenue ${0}".format(revenue.sum()))
 #Step 15. How many orders were made in the period?
 print("num of orders",chipo['order_id'].nunique())
 #Step 16. What is the average amount per order?
-print("average amount per order",chipo.groupby(by=['order_id']).sum().mean()['item_price'])
+chipo['totalOrderAmount'] = chipo['item_price'] * chipo['quantity']
+print("average amount per order",chipo.groupby('order_id')['totalOrderAmount'].sum().mean())
 #Step 17. How many different items are sold?
 print("num of item choices",chipo['item_price'].nunique())
 #2. Filtering & Sorting
@@ -53,7 +54,7 @@ print("num of item choices",chipo['item_price'].nunique())
 expensive = chipo.query('item_price > 10').groupby('item_name')
 print("products with price > 10",len(expensive))
 #Step 5. What is the price of each item?
-expensive.describe()
+print("price per item",chipo.groupby('item_name')['item_price'].mean())
 #print a data frame with only two columns item_name and item_price
 print(chipo[['item_name','item_price']])
 #Step 6. Sort by the name of the item
