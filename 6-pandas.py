@@ -112,11 +112,11 @@ all_data_col = pd.concat([data1,data2],axis = 1)
 #Step 6. Print data3
 print(data3)
 #Step 7. Merge all_data and data3 along the subject_id value
-merged = data3.set_index('subject_id').join(all_data.set_index('subject_id'))
+merged7 = data3.set_index('subject_id').join(all_data.set_index('subject_id'))
 #Step 8. Merge only the data that has the same 'subject_id' on both data1 and data2
-merged = data3.set_index('subject_id').join(all_data.set_index('subject_id'))
+merged8 = data1.merge(data2, how = 'inner', on = ['subject_id'])
 #Step 9. Merge all values in data1 and data2, with matching records from both sides where available.
-merged = data3.merge(all_data, how = 'inner', on = ['subject_id'])
+merged9 = data1.merge(data2, how = 'outer', on = ['subject_id'])
 #5. Deleting
 #This exercise may seem a little bit strange, but keep doing it
 #Step 1. Import the necessary libraries
