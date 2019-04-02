@@ -122,7 +122,7 @@ merged9 = data1.merge(data2, how = 'outer', on = ['subject_id'])
 #Step 1. Import the necessary libraries
 #Step 2. Import the dataset from this
 #https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data
-iris = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data')
+iris = pd.read_csv('https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data',header=None)
 #Step 3. Assign it to a variable called iris
 #Step 4. Create columns for the dataset
 #1. sepal_length (in cm)
