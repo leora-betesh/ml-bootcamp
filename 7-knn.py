@@ -8,9 +8,8 @@ from sklearn.datasets import load_iris
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.colors import ListedColormap
-import pandas as pd
-from sklearn.model_selection import train_test_split
 
+#Added this hoping to make a beautiful plot of the decision boundaries but couldn't get it working on my classifier.
 cmap_light = ListedColormap(['#FFAAAA', '#AAFFAA', '#AAAAFF'])
 cmap_bold = ListedColormap(['#FF0000', '#00FF00', '#0000FF'])
                                     
