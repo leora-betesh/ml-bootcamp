@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Created on Thu Apr 14 22:05:57 2019
 
@@ -59,11 +58,12 @@ class DecisionTreeClassifier():
         
         if self.calc_gini(rows) == 0 or node_level > self.max_depth :
             #If gini is 0 we found a class, i.e. all items are in the same class.  
-            #Take the first class value and create a leaf node.
+            #Take first class value (0th row, 1st col) and use that value to create leaf node.
             return Leaf(rows.iloc[0,1])
         
-        best_gain, best_split_feature, best_split_value = self.find_best_split(rows)
-        left_rows, right_rows = self.data_split(rows, best_split_feature, best_split_value)                    
+        best_split_feature, best_split_value = self.find_best_split(rows)
+        left_rows, right_rows = self.data_split(rows, best_split_feature, best_split_value) 
+                   
         left_child = self.build_tree(left_rows, node_level)
         right_child = self.build_tree(right_rows, node_level)
         
@@ -106,39 +106,35 @@ class DecisionTreeClassifier():
         probabilities =  [x / float(len(rows)) for x in counts.values()]      
         return 1 - sum([p**2 for p in probabilities])
     
-    #The uncertainty of the starting node, minus the weighted impurity of two child nodes
-    def info_gain(self, left, right, current_uncertainty):
-        p = (float(len(left)) / (len(left) + len(right)))
-        return current_uncertainty - p * self.calc_gini(left) - (1 - p) * self.calc_gini(right)
-    
     def find_best_split(self, rows):
-        best_gain = 0  
         best_split_feature = 0
         best_split_value = 0
-        current_uncertainty = self.calc_gini(rows)
+        best_gini = 1
         n_features = rows.shape[1] 
         
         for col in range(2, n_features):
             values = rows[col].unique()        
             for val in values:
                 left_rows, right_rows = self.data_split(rows, col, val)
-                gain = self.info_gain(left_rows, right_rows, current_uncertainty)
-                if gain > best_gain:
-                    best_gain, best_split_feature, best_split_value = gain, col, val
-        return best_gain, best_split_feature, best_split_value 
+                p = (float(len(left_rows)) / (len(rows)))
+                current_gini = self.calc_gini(left_rows)*p + self.calc_gini(right_rows)* (1-p)
+                if current_gini < best_gini:
+                    best_gini = current_gini
+                    best_split_feature, best_split_value = col, val
+        return best_split_feature, best_split_value 
 
 def main():
     wdbc = pd.read_csv('wdbc.data.txt',header=None)
-    train_data, test_data = train_test_split(wdbc, test_size=0.2, random_state=88) 
+    train_data, test_data = train_test_split(wdbc, test_size=0.2, random_state=42) 
     
     #Create classifier objects with varied tree depths so we can determine optimal depth
     for max_depth in range(1,7):
         tree = DecisionTreeClassifier(max_depth)
         tree.fit(train_data)
+        #tree.print_tree()
         tree.make_predictions(test_data)
 
 if __name__ == '__main__':
     main()
-
 
 
